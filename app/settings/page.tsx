@@ -1,0 +1,3 @@
+import AppShell from "../components/AppShell";
+
+export default function SettingsPage() { return <AppShell><main className="page-content"><div className="page-heading"><div><h1>Settings</h1><p>Configure your Vidrivo workspace preferences.</p></div></div><section className="panel" style={{ maxWidth: 680, padding: 24 }}><h2 className="section-title">Media delivery</h2><p className="section-subtitle">Vidrivo delivers uploaded media through your connected ImageKit account.</p><div className="selected-file" style={{ marginTop: 20 }}><div className="file-preview">IK</div><div className="file-meta"><strong>ImageKit</strong><span>Connected through environment configuration</span></div><span className="status">Connected</span></div></section></main></AppShell>; }
