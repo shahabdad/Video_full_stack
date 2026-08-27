@@ -6,7 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
-const iconProps = { fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 1.8, viewBox: "0 0 24 24" };
+const iconProps: IconProps = { fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 1.8, viewBox: "0 0 24 24" };
 const Home = (props: IconProps) => <svg {...iconProps} {...props}><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" /><path d="M9 21v-8h6v8" /></svg>;
 const Video = (props: IconProps) => <svg {...iconProps} {...props}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m10 9 5 3-5 3z" /></svg>;
 const Upload = (props: IconProps) => <svg {...iconProps} {...props}><path d="M12 16V4" /><path d="m7 9 5-5 5 5" /><path d="M5 20h14" /></svg>;
