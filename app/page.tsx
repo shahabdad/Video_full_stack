@@ -1,69 +1,13 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import AppShell from "./components/AppShell";
+import VideoTable, { type VideoRecord } from "./components/VideoTable";
+
+export default function DashboardPage() {
+  const [videos, setVideos] = useState<VideoRecord[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState("");
+  useEffect(() => { fetch("/video").then((response) => { if (!response.ok) throw new Error(); return response.json(); }).then(setVideos).catch(() => setError("We could not load your video library. Please try again.")).finally(() => setLoading(false)); }, []);
+  const uploadedThisMonth = useMemo(() => videos.filter((video) => video.createdAt && new Date(video.createdAt).getMonth() === new Date().getMonth()).length, [videos]);
+  return <AppShell><main className="page-content"><div className="page-heading"><div><h1>Dashboard</h1><p>Manage uploads, monitor your library, and publish new videos.</p></div><Link href="/upload" className="button button-primary">Upload video</Link></div><section className="stats-grid" aria-label="Video overview"><div className="stat-card"><span className="stat-label">Videos in library</span><strong className="stat-value">{loading ? "—" : videos.length}</strong><span className="stat-detail">All videos in your workspace</span></div><div className="stat-card"><span className="stat-label">Uploaded this month</span><strong className="stat-value">{loading ? "—" : uploadedThisMonth}</strong><span className="stat-detail">Based on upload date</span></div><div className="stat-card"><span className="stat-label">Storage provider</span><strong className="stat-value" style={{ fontSize: 20 }}>ImageKit</strong><span className="stat-detail">Cloud delivery is configured</span></div></section>{error && <p className="form-error">{error}</p>}<section className="panel"><header className="panel-header"><div><h2 className="section-title">Recent videos</h2><p className="section-subtitle">Your most recently uploaded media</p></div><Link href="/videos" className="text-link" style={{ fontSize: 13 }}>View all</Link></header>{loading ? <div style={{ padding: 40, color: "#78716C", fontSize: 14 }}>Loading your videos…</div> : <VideoTable videos={videos} compact />}</section></main></AppShell>;
 }

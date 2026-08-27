@@ -19,10 +19,8 @@ export const authOpations: NextAuthOptions = {
 
                 try {
                     await connectToDatabase()
-                    const user = await User.findOne({
-                        email:
-                            credentials.email
-                    })
+                    const email = credentials.email.trim().toLowerCase();
+                    const user = await User.findOne({ email })
                     if (!user) {
                         throw new Error("No user found with this");
                     }
@@ -35,7 +33,10 @@ export const authOpations: NextAuthOptions = {
                         throw new Error("No user found with this ");
                     }
 
-                    return user;
+                    return {
+                        id: user._id.toString(),
+                        email: user.email,
+                    };
 
                 } catch (error) {
                     console.error("Auth error:", error)
